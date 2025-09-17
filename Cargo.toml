@@ -1,0 +1,13 @@
+[package]
+name = "sehundioelarca"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+arc-swap = "1.7.1"
+axum = "0.8.4"
+integracion_arca = { git = "https://github.com/coyoteazul/integracion_arca.git", version = "0.1.0" }
+reqwest          = { version = "0.12.15", default-features = false, features = ["rustls-tls"] }
+serde            = { version = "1.0.225", default-features = false, features = ["serde_derive"] }
+tokio            = { version = "1.47.1",  default-features = false, features = ["macros", "rt-multi-thread"] }
+
