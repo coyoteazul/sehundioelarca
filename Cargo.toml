@@ -6,9 +6,10 @@ edition = "2024"
 [dependencies]
 tera             = { version = "1.20.0" , default-features = false }
 axum             = { version = "0.8.4"  , default-features = false, features = ["http1","http2", "json", "tokio"] }
-integracion_arca = { git = "https://github.com/coyoteazul/integracion_arca.git", version = "0.1.0", features = ["wsfev1_dummy"] }
+integracion_arca = { version = "0.1.0", features = ["wsfev1_dummy", "wsfexv1_dummy", "wsmtxca_dummy", "wscpe_dummy", "wslpg_dummy"], path = "../integracion_arca" }
 lazy_static      = { version = "1.5.0"  , default-features = false }
 reqwest          = { version = "0.12.15", default-features = false, features = ["rustls-tls"] }
 serde            = { version = "1.0.225", default-features = false, features = ["serde_derive"] }
 tokio            = { version = "1.47.1" , default-features = false, features = ["macros", "rt-multi-thread"] }
 tower-http       = { version = "0.6.6"  , default-features = false, features = ["cors"] }
+flate2 = "1.1.2"

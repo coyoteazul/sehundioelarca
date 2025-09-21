@@ -1,0 +1,82 @@
+.cards {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+.card {
+	border: 1px solid #ddd;
+	padding: 1rem;
+	border-radius: 6px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.card h4 {
+	margin-bottom: 0;
+}
+.ok { color: green; }
+.fail { color: red; }
+
+.status-badge {
+	display: inline-block;
+	font-size: 0.9rem;
+	margin-bottom: 10px;
+	padding: 2px 6px;
+	border-radius: 4px;
+}
+.status-badge.ok {
+	color: rgb(21, 97, 21);
+	background: rgb(205, 240, 205);
+}
+.status-badge.alert {
+	color: rgb(138, 92, 0);
+	background: rgb(255, 239, 180);
+}
+.status-badge.error {
+	color: rgb(138, 0, 0);
+	background: rgb(255, 204, 204);
+}
+
+
+
+.bead {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+}
+.bead.green { background-color: #28a745; } /* green */
+.bead.red { background-color: #dc3545; }   /* red */
+
+.status-table {
+	width: 100%;
+	border-collapse: collapse;      /* makes one clean grid */
+	text-align: center;             /* center text and macros */
+}
+
+.status-table th,
+.status-table td {
+	border: 1px solid #ccc;         /* interior + exterior lines */
+	padding: 8px;
+}
+
+.status-table th {
+	background-color: #f8f8f8;      /* optional: subtle header bg */
+	font-weight: bold;
+}
+
+.timeline {
+	display: flex;
+	width: 100%;         /* full width */
+	height: 20px;        /* bar height */
+}
+
+.histo {
+	flex: 1;             /* each segment equal width */
+}
+.histo.Ok { background-color: #cdefc3; }    /* green */
+.histo.Alerta { background-color: #ffeaa7; } /* amber */
+.histo.Error { background-color: #fab1a0; } /* red */

@@ -1,12 +1,10 @@
-use std::{sync::{Arc}, time::Duration};
+use std::sync::{Arc};
 
-use axum::{extract::State, response::Html, Json, Router};
+use axum::{extract::State, Json, Router};
 use tokio::sync::RwLock;
 use tower_http::cors::CorsLayer;
 
-use crate::arca::{check_status_job, ServiceStatus};
-
-
+use crate::{arca::{check_status_job, Servicios}, front::{get_css, get_front}};
 
 mod arca;
 mod front;
@@ -15,11 +13,11 @@ mod front;
 async fn main() {
     
 		let status = Arc::new(RwLock::new(AppState {
-			status: vec![],
-			front : String::new(),
+			status: Servicios::new(),
+			front : vec![],
 		}));
 		
-		check_status_job(status.clone(), Duration::from_secs(60/*1 minutos*/));
+		check_status_job(status.clone());
 
 		let cors_permissive = CorsLayer::new()
 				.allow_origin(tower_http::cors::Any) // Allow any origin (wildcard *)
@@ -28,8 +26,9 @@ async fn main() {
 
 
 		let app = Router::new()
-        .route("/status", axum::routing::get(get_status_handler))
-				.route("/"      , axum::routing::get(get_front))
+        .route("/status"    , axum::routing::get(get_status_handler))
+				.route("/"          , axum::routing::get(get_front))
+				.route("/style2.css", axum::routing::get(get_css))
 				.layer(cors_permissive)
         .with_state(status.clone()); 
 
@@ -38,16 +37,16 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-async fn get_status_handler(State(status): State<Arc<RwLock<AppState>>>) -> Json<Vec<ServiceStatus>> {
+async fn get_status_handler(State(status): State<Arc<RwLock<AppState>>>) -> Json<Servicios> {
     let status_guard = status.read().await;
     Json(status_guard.status.clone())
 }
 
-async fn get_front(State(status): State<Arc<RwLock<AppState>>>) -> Html<String>{
-	Html(status.read().await.front.clone())
-}
+
+
+
 
 pub struct AppState {
-	pub status: Vec<ServiceStatus>,
-	pub front : String,
+	pub status: Servicios,
+	pub front : Vec<u8>,
 }
