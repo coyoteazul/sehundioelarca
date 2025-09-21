@@ -1,0 +1,7 @@
+{% macro bead(value) %}
+    {% if value %}
+        <span class="bead green"></span>
+    {% else %}
+        <span class="bead red"></span>
+    {% endif %}
+{% endmacro %}

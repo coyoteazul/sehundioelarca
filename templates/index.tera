@@ -1,0 +1,120 @@
+{% import "status_bead.tera" as macros %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Dashboard</title>
+  <style>
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+		.card {
+			border: 1px solid #ddd;
+			padding: 1rem;
+			border-radius: 6px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+		}
+
+    .card h3 {
+      margin-top: 0;
+    }
+    .ok { color: green; }
+    .fail { color: red; }
+
+		.status-badge {
+			display: inline-block;
+			font-size: 0.9rem;
+			margin-bottom: 10px;
+			padding: 2px 6px;
+			border-radius: 4px;
+		}
+		.status-badge.ok {
+			color: rgb(21, 97, 21);
+			background: rgb(205, 240, 205);
+		}
+		.status-badge.alert {
+			color: rgb(138, 92, 0);
+			background: rgb(255, 239, 180);
+		}
+		.status-badge.error {
+			color: rgb(138, 0, 0);
+			background: rgb(255, 204, 204);
+		}
+
+		
+
+		.bead {
+			display: inline-block;
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+		}
+		.bead.green { background-color: #28a745; } /* green */
+		.bead.red { background-color: #dc3545; }   /* red */
+		
+		.status-table {
+			width: 100%;
+			border-collapse: collapse;      /* makes one clean grid */
+			text-align: center;             /* center text and macros */
+		}
+
+		.status-table th,
+		.status-table td {
+			border: 1px solid #ccc;         /* interior + exterior lines */
+			padding: 8px;
+		}
+
+		.status-table th {
+			background-color: #f8f8f8;      /* optional: subtle header bg */
+			font-weight: bold;
+		}
+  </style>
+	<script>
+		// @ts-nocheck
+		const next_ = {{ next_update }} *1000 // convert seconds to ms
+		function TimestampToLocal() {
+			const date = new Date(next_); 
+			return new Intl.DateTimeFormat('en-GB',{year:"numeric", month:"2-digit",day:"2-digit", hour:"2-digit", minute:"2-digit", hour12:true }).format(date);
+		}
+		function MsToTimestamp(){
+			const milis = Date.now();
+			const ret   = Math.max( next_ - milis, 5000); //si el backend todavia no se actualizo, vuelvo a intentar en 5 segundos
+			console.log("recarga en "+ (ret /1000 / 60).toFixed(2)+" minutos",);
+			return ret
+		}
+	</script>
+</head>
+<body>
+  <h1>Servicios de ARCA</h1>
+	<h4>El estado de los servicios se actualiza cada {{intervalo}} minutos en base a los metodos Dummy de cada servicio</h4>
+	<p>Proxima actualizacion: <script>document.write(TimestampToLocal());</script></p>
+  <div class="cards">
+    {% for service in services %}
+      <div class="card">
+        <h3>{{ service.name }}</h3>
+        <p class="status-badge {% if service.status != 200 %} error {% elif service.milis_respuesta > 1000 %} alert {% else %} ok {% endif %}">Status: {{ service.status }} ({{service.milis_respuesta}}ms)</p>
+        <table class="status-table">
+					<tr>
+						<th>App Server</th>
+						<th>DB Server</th>
+						<th>Auth Server</th>
+					</tr>
+					<tr>
+						<td>{{ macros::bead(value=service.app_server) }}</td>
+						<td>{{ macros::bead(value=service.db_server) }}</td>
+						<td>{{ macros::bead(value=service.auth_server) }}</td>
+					</tr>
+				</table>
+      </div>
+    {% endfor %}
+  </div>
+  <script>
+    // Recarga la pagina cuando se cumple la hora
+    setTimeout(() => location.reload(), MsToTimestamp());
+  </script>
+</body>
+</html>
+

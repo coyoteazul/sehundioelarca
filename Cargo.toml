@@ -4,10 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-arc-swap = "1.7.1"
-axum = "0.8.4"
-integracion_arca = { git = "https://github.com/coyoteazul/integracion_arca.git", version = "0.1.0" }
+tera             = { version = "1.20.0" , default-features = false }
+axum             = { version = "0.8.4"  , default-features = false, features = ["http1","http2", "json", "tokio"] }
+integracion_arca = { git = "https://github.com/coyoteazul/integracion_arca.git", version = "0.1.0", features = ["wsfev1_dummy"] }
+lazy_static      = { version = "1.5.0"  , default-features = false }
 reqwest          = { version = "0.12.15", default-features = false, features = ["rustls-tls"] }
 serde            = { version = "1.0.225", default-features = false, features = ["serde_derive"] }
-tokio            = { version = "1.47.1",  default-features = false, features = ["macros", "rt-multi-thread"] }
-
+tokio            = { version = "1.47.1" , default-features = false, features = ["macros", "rt-multi-thread"] }
+tower-http       = { version = "0.6.6"  , default-features = false, features = ["cors"] }
