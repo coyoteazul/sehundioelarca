@@ -1,18 +1,62 @@
+body {
+  background: #f5f7fa;
+  font-family: "Inter", sans-serif;
+  color: #333;
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+contenido {
+	flex: 1;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+nav {
+  display: flex;
+  align-items: center;           /* vertically center title + image */
+  justify-content: flex-start;   /* left-align */
+  background-color: #222;        /* dark background */
+  color: #fff;                   /* white text */
+  padding: 0.5rem 1rem;          /* space inside nav */
+  gap: 1rem;                     /* space between title and image */
+}
+
+nav h1 {
+  margin: 0;                     /* remove default margin */
+  font-size: 1.5rem;             /* adjust as needed */
+}
+
+nav img {
+  height: 40px;                  /* control image size */
+  width: auto;                   /* preserve aspect ratio */
+}
+
 .cards {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 1rem;
 }
 .card {
-	border: 1px solid #ddd;
-	padding: 1rem;
-	border-radius: 6px;
-	box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
 }
 
 .card h3 {
 	margin-top: 0;
 	margin-bottom: 0;
+	color: #1f2937; /* slightly softer black */
 }
 .card h4 {
 	margin-bottom: 0;
@@ -21,11 +65,11 @@
 .fail { color: red; }
 
 .status-badge {
-	display: inline-block;
-	font-size: 0.9rem;
-	margin-bottom: 10px;
-	padding: 2px 6px;
-	border-radius: 4px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-block;
 }
 .status-badge.ok {
 	color: rgb(21, 97, 21);
@@ -53,8 +97,8 @@
 
 .status-table {
 	width: 100%;
-	border-collapse: collapse;      /* makes one clean grid */
-	text-align: center;             /* center text and macros */
+	border-collapse: collapse;
+	text-align: center;
 }
 
 .status-table th,
@@ -80,3 +124,15 @@
 .histo.Ok { background-color: #cdefc3; }    /* green */
 .histo.Alerta { background-color: #ffeaa7; } /* amber */
 .histo.Error { background-color: #fab1a0; } /* red */
+
+footer {
+  text-align: center;
+  padding: 3px;
+  background-color: rgb(175, 168, 165);
+  color: rgb(59, 57, 57);
+	max-height: 80px;
+}
+
+footer p {
+	margin: 5px;
+}

@@ -4,7 +4,7 @@ use axum::{extract::State, Json, Router};
 use tokio::sync::RwLock;
 use tower_http::cors::CorsLayer;
 
-use crate::{arca::{check_status_job, Servicios}, front::{get_css, get_front}};
+use crate::{arca::{check_status_job, Servicios}, front::{get_css, get_front, get_image}};
 
 mod arca;
 mod front;
@@ -29,6 +29,7 @@ async fn main() {
         .route("/status"    , axum::routing::get(get_status_handler))
 				.route("/"          , axum::routing::get(get_front))
 				.route("/style2.css", axum::routing::get(get_css))
+				.route("/arca.png"  , axum::routing::get(get_image))
 				.layer(cors_permissive)
         .with_state(status.clone()); 
 

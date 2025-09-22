@@ -1,4 +1,4 @@
-use std::{io::Write, sync::Arc, time::Duration};
+use std::{fs::{self}, io::Write, sync::Arc, time::Duration};
 
 use axum::{body::Body, extract::State, http::{HeaderValue, Response}, response::IntoResponse};
 use flate2::{write::GzEncoder, Compression};
@@ -59,6 +59,24 @@ pub async fn get_css() -> impl IntoResponse {
 	response.headers_mut().insert(
 			header::CONTENT_TYPE,
 			HeaderValue::from_static("text/css; charset=utf-8"),
+	);
+	response.headers_mut().insert(
+			header::CACHE_CONTROL,
+			HeaderValue::from_static("public, max-age=31536000, immutable"),
+	);
+	response
+}
+
+pub async fn get_image() -> impl IntoResponse {
+	let img = fs::read("images/arca.png").unwrap();
+	let body = Body::from(img);
+	
+
+	let mut response = Response::new(body);
+	
+	response.headers_mut().insert(
+			header::CONTENT_TYPE,
+			HeaderValue::from_static("image/png"),
 	);
 	response.headers_mut().insert(
 			header::CACHE_CONTROL,

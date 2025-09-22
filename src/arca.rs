@@ -49,16 +49,16 @@ async fn get_status(req_cli:&Client)->Dummies {
 		wsmtxca_prod, wsmtxca_homo, wscpe_prod  , wscpe_homo,
 		wslpg_prod  , wslpg_homo,
 	)= join!( 
-		wsfev1::service_status(req_cli, true),
-		wsfev1::service_status(req_cli, false),
-		wsfexv1::service_status(req_cli, true),
-		wsfexv1::service_status(req_cli, false),
-		wsmtxca::service_status(req_cli, true),
-		wsmtxca::service_status(req_cli, false),
-		wscpe::service_status(req_cli, true),
-		wscpe::service_status(req_cli, false),
-		wslpg::service_status(req_cli, true),
-		wslpg::service_status(req_cli, false),
+		wsfev1::service_status( req_cli, true , None),
+		wsfev1::service_status( req_cli, false, None),
+		wsfexv1::service_status(req_cli, true , None),
+		wsfexv1::service_status(req_cli, false, None),
+		wsmtxca::service_status(req_cli, true , None),
+		wsmtxca::service_status(req_cli, false, None),
+		wscpe::service_status(  req_cli, true , None),
+		wscpe::service_status(  req_cli, false, None),
+		wslpg::service_status(  req_cli, true , None),
+		wslpg::service_status(  req_cli, false, None),
 	);
 
 	Dummies { wsfev1_prod, wsfev1_homo, wsfexv1_prod, wsfexv1_homo, wsmtxca_prod, wsmtxca_homo, wscpe_prod, wscpe_homo, wslpg_prod, wslpg_homo }
@@ -70,6 +70,7 @@ async fn get_status(req_cli:&Client)->Dummies {
 pub struct ServiceStatus {
 	name       : String,
 	status     : u16,
+	status_msg : String,
 	app_server : bool,
 	db_server  : bool,
 	auth_server: bool,
@@ -82,6 +83,7 @@ impl ServiceStatus {
 		ServiceStatus {
 			name,
 			status: 500,
+			status_msg: "Desconocido".to_owned(),
 			app_server: false,
 			db_server: false,
 			auth_server: false,
@@ -105,6 +107,7 @@ impl ServiceStatus {
 		self.auth_server     = dum.auth_server;
 		self.db_server       = dum.db_server;
 		self.milis_respuesta = dum.milis_respuesta;
+		self.status_msg      = dum.status.canonical_reason().unwrap_or("Desconocido").to_owned();
 		self.status          = dum.status.as_u16();
 
 		self.historial.push(self.tri_estado());

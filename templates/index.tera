@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Status Dashboard</title>
   <link rel="stylesheet" href="/style2.css">
+	<link href="/arca.png" rel="icon" type="image/x-icon">
 	<script>
-		// @ts-nocheck
 		const next_ = {{ next_update }} *1000 // convert seconds to ms
 		function TimestampToLocal() {
 			const date = new Date(next_); 
@@ -22,37 +22,47 @@
 	</script>
 </head>
 <body>
-  <h1>Servicios de ARCA</h1>
-	<h4>El estado de los servicios se actualiza cada {{intervalo}} minutos en base a los metodos Dummy de cada servicio</h4>
-	<p>Proxima actualizacion: <script>document.write(TimestampToLocal());</script></p>
-  <div class="cards">
-    {% for service in services %}
-      <div class="card">
-        <h3>{{ service.name }}</h3>
-        <p class="status-badge {% if service.status != 200 %} error {% elif service.milis_respuesta > 1000 %} alert {% else %} ok {% endif %}">Status: {{ service.status }} ({{service.milis_respuesta}}ms)</p>
-        <table class="status-table">
-					<tr>
-						<th>App Server</th>
-						<th>DB Server</th>
-						<th>Auth Server</th>
-					</tr>
-					<tr>
-						<td>{{ macros::bead(value=service.app_server) }}</td>
-						<td>{{ macros::bead(value=service.db_server) }}</td>
-						<td>{{ macros::bead(value=service.auth_server) }}</td>
-					</tr>
-				</table>
-				<h4>Historial 24hs</h4>
-				<div class="timeline">
-					{% for status in service.historial %}<div class="histo {{ status }}"></div>{% endfor %}
+	<nav><h1>¿Se hunde el ARCA?</h1><img src="/arca.png"/></nav>
+	<contenido>	
+		<h3>Revisamos el estado de los servicios de ARCA consultando los metodos dummy de cada servicio cada {{intervalo}} minutos.</h4>
+		<p>Recuerda que los metodos dummy no necesariamente reflejen el correcto funcionamiento de los demas metodos</p>
+		<p>Proxima actualizacion: <script>document.write(TimestampToLocal());</script></p>
+		<div class="cards">
+			{% for service in services %}
+				<div class="card">
+					<h3>{{ service.name }}</h3>
+					<p class="status-badge {% if service.status != 200 %} error {% elif service.milis_respuesta > 1000 %} alert {% else %} ok {% endif %}">
+						Status: {{ service.status }} {{ service.status_msg }} ({{service.milis_respuesta}}ms)
+					</p>
+					<table class="status-table">
+						<tr>
+							<th>App Server</th>
+							<th>DB Server</th>
+							<th>Auth Server</th>
+						</tr>
+						<tr>
+							<td>{{ macros::bead(value=service.app_server) }}</td>
+							<td>{{ macros::bead(value=service.db_server) }}</td>
+							<td>{{ macros::bead(value=service.auth_server) }}</td>
+						</tr>
+					</table>
+					<h4>Historial 24hs</h4>
+					<div class="timeline">
+						{% for status in service.historial %}<div class="histo {{ status }}"></div>{% endfor %}
+					</div>
 				</div>
-      </div>
-    {% endfor %}
-  </div>
+			{% endfor %}
+		</div>
+	</contenido>
+	<footer>
+		<p>© 2025</p>
+		<p>Este sitio no guarda relacion alguna con ARCA ni ningun otro ente Gubernamental</p>
+	</footer>
   <script>
     // Recarga la pagina cuando se cumple la hora
     setTimeout(() => location.reload(), MsToTimestamp());
   </script>
 </body>
+
 </html>
 
